@@ -293,6 +293,12 @@ class PingWrapper2 : public PingWrapper
             case dataSize24Bit: return 3; break;
             case dataSize32Bit: return 4; break;
             default:
+
+                // Case to handle when sonar data is half-sized
+                if(this->metadata().imageSize  * 2 == this->metadata().nRanges*this->metadata().nBeams) {
+                    return 1;
+                }
+
                 //invalid value in metadata.dataSize. Deducing from message size.
                 auto lineStep = this->metadata().imageSize / this->metadata().nRanges;
                 if(lineStep*this->metadata().nRanges != this->metadata().imageSize) {
